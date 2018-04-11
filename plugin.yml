@@ -1,0 +1,6 @@
+main: mimiga.Main
+name: Mimiga
+version: 1.0
+author: Robert Chen
+description: Implement mimiga!
+commands:
