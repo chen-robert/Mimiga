@@ -1,0 +1,2 @@
+# Mimiga
+A Minecraft plugin. 
