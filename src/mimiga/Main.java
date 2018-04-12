@@ -2,12 +2,16 @@ package mimiga;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -24,7 +28,6 @@ public class Main extends JavaPlugin implements Listener {
 
 	@Override
 	public void onEnable() {
-		System.out.println(getConfig().getString("name-format"));
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
@@ -51,6 +54,9 @@ public class Main extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onRightClick(PlayerInteractEvent event) {
+		if (event.getAction() != Action.RIGHT_CLICK_AIR)
+			return;
+
 		Player player = event.getPlayer();
 
 		if (!player.hasPermission("mimiga.status"))
@@ -65,6 +71,12 @@ public class Main extends JavaPlugin implements Listener {
 					getConfig().getInt("strength-effect-value") - 1), true);
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, getConfig().getInt("mimiga-time"),
 					getConfig().getInt("jump-effect-value") - 1), true);
+
+			player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1.0f, 3.0f);
+			for (double i = 0; i < 10 * 2 * Math.PI; i += Math.PI / 10) {
+				player.spawnParticle(Particle.BLOCK_CRACK, player.getLocation(), 1, Math.cos(i), 1.0, Math.sin(i),
+						new MaterialData(Material.RED_ROSE));
+			}
 		}
 	}
 
